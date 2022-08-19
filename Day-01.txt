@@ -1,0 +1,97 @@
+================ Database ================
+What is a database?
+- A collection of data and holds this data in the form of tables.
+
+What is a table?
+- Holds the data in the form of rows and columns
+
+* It is similar to excel spreadsheet
+
+Ques: Why don't we use excel spreadsheet to store the data rather than database?
+Ans: What if we have 1000's of excel sheet, it will be tedious to access excel sheet. On the other hand, handling the database
+    would be easier since it provides various other functionalities.
+
+* The database provides us the capability to access and manipulate this data.
+
+================ Types of databases ================
+
+1. Relational database 
+    - Data is stored in the form of rows and columns. 
+    - And tables will have relations b/w them.
+    - Eg: MySQL, SQL Server, PostgreSQL, SQLite, MariaDB
+    - MySQL is used widely, so we will use this.
+
+2. No SQL database
+    - Key value pairs.
+    - Document.
+    - Graph.
+    - Tables will not have relations b/w them.
+    - Eg: HBase, MongoDB, Cassandra
+
+================ How the databases differ from each other? ================
+
+- They don't differ in terms of the SQL statement we write.
+- Rather they differ in terms of the feature they offer. Eg: Security
+
+================ SQL ================
+
+1. Structured Query Language used to query a Relational DB.
+2. This Language is used to deal with Structured data which is in the form of rows and columns.
+3. SQL is a Language through which we interact with the databases.
+4. Eg: SQL is a way to interact with MySQL MariaDB.
+5. SQL holds good for all the Relational databases.
+
+================ Installation ================
+
+1. goormIDE (No local Installation required) : https://ide.goorm.io/my/dashboard#/containers/new
+2. mysql-ctl cli 
+3. mysql> show databases; --> to get the list of databases which are already present.
+4. To clear goormIDE terminal, Ctrl + L
+5. mysql> create database trendytech; --> to create database
+6. mysql> show databases;
+7. mysql> drop database trendytech; --> to drop the database
+
+================ How to get into database or change the database? ================
+
+1. USE <Database_Name>;
+2. USE trendytech;
+
+================ How to check which Database we are currently using ? ================
+
+1. select database();
+
+================ How to create table ? ================
+
+1. CREATE TABLE employee (
+    name varchar(),
+    age INT,
+    salary INT
+);
+
+================ How to see list of tables inside a database we are connected ? ================
+
+1. show tables;
+
+================ How to see the structure of a table inside a database we are connected ? ================
+
+1. describe employee;
+2. desc employee;
+
+================ How to drop tables/database ? ================
+
+1. drop table employee;
+2. drop database trendytech;
+
+select database(); --> will give NULL since no database present
+
+3. create database trendytech;
+4. CREATE TABLE trendytech.employee 
+    (
+    name varchar(50),
+    age INT,
+    salary INT
+    );
+
+5. show tables; --> will give NULL because we aren't yet connected to any DB.
+5. use trendytech;
+6. show tables;

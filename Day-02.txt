@@ -1,0 +1,156 @@
+================ CRUD Operations ================
+
+1. create - insert statements
+2. read - select statements
+3. Update - update statements
+4. Delete - delete statements
+
+================ Creation of Table and Insert Statements ================
+
+CREATE TABLE employee(
+    firstname varchar(20),
+    middlename varchar(20),
+    lastname varchar(20),
+    age int,
+    salary int,
+    location varchar(20)
+);
+
+- These commands are called as DDL (Data Definition Language)
+
+- mysql> desc employee;
+- mysql> select * from employee;
+
+================ INSERT ================
+
+mysql> INSERT INTO employee(firstname, middlename, lastname, age, salary, location) 
+values
+('Vijay', 'Anand', 'Pokhriyal', 26, 10000, 'Indore');
+
+mysql> INSERT INTO employee
+values
+('Anand', 'Vallabh', 'Pokhriyal', 53, 10000, 'Indore');
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Akshay', 'Kumar', 28, 10000, 'Mumbai');
+
+----- Below query will give an error, since only 5 arguments were passed instead of 6 arguments, if we are not passing value for any
+----- parameter then we must pass all the fields in INSERT query
+
+mysql> INSERT INTO employee
+values
+('Anand', 'Pokhriyal', 53, 10000, 'Indore');
+
+--- If we want to put ' (single apostrophe) in between
+
+--- With "" quotes ---
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Manish', "Kumar's", 28, 10000, 'Mumbai');
+
+--- With \ character
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Rajesh', 'Kumar\'s', 28, 10000, 'Mumbai');
+
+------ How to insert multiple values in a table ? (BULK INSERT)--------
+
+INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Akshay', 'Kumar', 28, 10000, 'Mumbai'), ('Rohit', 'Kumar', 29, 10000, 'Chennai'), ('Ronak', 'Singh', 30, 10000, 'Goa');
+
+========== Datatype mismatch =============
+
+INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('AkshayAkshayAkshayAkshay', 'Kumar', 28, 10000, 'Mumbai');
+
+- Will give error: Data too long for column 'firstname'
+
+INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Akshay', 'Kumar', 'Twenty', 10000, 'Mumbai');
+
+- Will give error: Incorrect integer value: 'Twenty' for column 'age'
+
+============== NULL ==============
+
+- If we put firstname as empty then also it will get inserted as of current table structure.
+- Since firstname can't be null, so we should not allow NULL values for some columns
+- We must restructure the table by putting more constraints for columns.
+
+- DROP table employee;
+- CREATE TABLE employee(
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL
+);
+
+- The above table structure is better than the previous Operations
+- DESC employee;
+
+- INSERT INTO employee(middlename, lastname, age, salary, location) 
+values
+('Kumar', 'Singh', 20, 10000, 'Mumbai');
+
+- Will give error:  Field 'firstname' doesn't have a default value
+
+=============== DEFAULT VALUES ==================
+
+- if we want any column value to be default.
+
+- DROP table employee;
+- CREATE TABLE employee(
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) DEFAULT 'Bangalore'
+);
+
+- If we don't give any name for particular column, it will take default value
+
+- Location will be default in below query
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary) 
+values
+('Aman', 'Rawat', 26, 10000);
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Binay', 'Singh', 36, 10000, 'Margoa');
+
+-- NULL is allowed for location as per current table Definition
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Mridul', 'Yadav', 36, 10000, null);
+
+-- We can again restructure the table Definition
+
+- DROP table employee;
+- CREATE TABLE employee(
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore'
+);
+
+- Now the below query will give error: Column 'location' cannot be null
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Mridul', 'Yadav', 36, 10000, null);
+
+- Below query will work perfectly as we aren't setting the location explicitly to null, so location will be taken default as Bangalore
+
+mysql> INSERT INTO employee(firstname, lastname, age, salary) 
+values
+('Mridul', 'Yadav', 36, 10000);

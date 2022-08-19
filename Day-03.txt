@@ -1,0 +1,157 @@
+======= Primary Key vs Unique Key ========
+
+1. Primary Key - to uniquely identify each record in the table
+2. Auto Increment Keys
+3. Unique Keys - The purpose is to have distinct values in a column
+4. Primary Key vs Unique Keys
+
+- DROP table employee;
+- CREATE TABLE employee(
+    id int,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore'
+);
+
+- INSERT INTO employee(id, firstname, lastname, age, salary, location) 
+values
+(1, 'Mridul', 'Yadav', 36, 10000, "Indore");
+
+- INSERT INTO employee(id, firstname, lastname, age, salary, location) 
+values
+(1, 'Vijay', 'Yadav', 36, 10000, "Indore");
+
+- Here we have inserted 2 records with same id which shouldn't happen, so again we have to set id as primary Key
+
+==== 1st way of defining Primary Key ====
+
+- DROP table employee;
+- CREATE TABLE employee(
+    id int PRIMARY KEY,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore'
+);
+
+- INSERT INTO employee(id, firstname, lastname, age, salary, location) 
+values
+(1, 'Mridul', 'Yadav', 36, 10000, "Indore");
+
+- INSERT INTO employee(id, firstname, lastname, age, salary, location) 
+values
+(1, 'Vijay', 'Yadav', 36, 10000, "Indore");
+==> It will give error: Duplicate entry '1' for key 'PRIMARY'
+
+- INSERT INTO employee(id, firstname, lastname, age, salary, location) 
+values
+(NULL, 'Vijay', 'Yadav', 36, 10000, "Indore");
+==> It will give error: Column 'id' cannot be null
+
+** For a primary key NULL is not allowed and also repeated values are not allowed **
+
+==== Another way of defining Primary Key ====
+
+CREATE TABLE employee(
+    id int,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore',
+    PRIMARY KEY(id)
+);
+
+======= Primary key on 2 Columns (Composite Primary Key) ========
+
+CREATE TABLE employee(
+    id int,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore',
+    PRIMARY KEY(id, firstname)
+);
+
+========= Auto Increment =========
+
+- The value has to increase automatically
+
+- DROP table employee;
+- CREATE TABLE employee(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore'
+);
+
+- INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Vijay', 'Yadav', 26, 10000, "Indore");
+
+- INSERT INTO employee(firstname, lastname, age, salary, location) 
+values
+('Akshay', 'Yadav', 24, 10000, "Mhow");
+
+==> id will auto increment from 1,2,3....and so on
+
+
+============ UNIQUE KEY =============
+
+1. Values cannot be duplicated.
+2. You can have only one primary key.
+3. And the Primary key cannot hold any NULL values.
+4. We should use Primary Key when we have to uniquely identify each record.
+
+** Unique key can hold NULL values **
+** In MySQL, a Unique Key can hold any number of NULL values
+** In some of the other famous DB's unique key hold only one NULL
+** The purpose of Unique key is to make sure the values do not duplicated
+** We can have multiple Unique keys but only one primary keys in a table.
+
+- DROP table employee;
+- CREATE TABLE employee(
+    firstname varchar(20) NOT NULL,
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    PRIMARY KEY(firstname, lastname) -- Composite Primary Key
+);
+
+- INSERT INTO employee values('Vijay', 'Pokhriyal', 26);
+- INSERT INTO employee values('Vijay', 'Pokhriyal', 26);
+
+==> The second Insert statement will give error: Duplicate entry 'Vijay-Pokhriyal' for key 'PRIMARY'
+
+- INSERT INTO employee values(NULL, 'Pokhriyal', 26);
+
+==>  Error: Column 'firstname' cannot be null [Because Primary key cannot be null]
+
+- DROP table employee;
+- CREATE TABLE employee(
+    id int UNIQUE KEY,
+    firstname varchar(20),
+    lastname varchar(20),
+    age int NOT NULL
+);
+
+- INSERT INTO employee values(1, 'Kapil', 'Sharma', 26);
+- INSERT INTO employee values(1, 'Kapil', 'Sharma', 26);
+
+==> For 2nd Insert query, Error: Duplicate entry '1' for key 'id'
+
+** Null values can be inserted in Unique keys **
+
+- INSERT INTO employee values(null, 'Kapil', 'Sharma', 26);
+
+** We can have a Unique keys on multiple columns and Composite Unique Keys **
