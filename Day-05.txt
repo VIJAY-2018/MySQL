@@ -1,0 +1,246 @@
+----------------------
+FOREIGN KEY CONSTRAINT
+----------------------
+- Consider an example of Students Table of Trendytech
+
+STUDENTS TABLE
+--------------
+student_id
+student_fname
+student_lname
+student_mname
+student_email
+student_phone
+student_alternate_phone
+enrollment_date
+years_of_exp
+student_compnany
+batch_date
+source_of_joining
+location
+
+-- Now, lets create a students table with the above data
+
+CREATE TABLE students(
+    student_id int AUTO_INCREMENT, 
+    student_fname varchar(30) NOT NULL, 
+    student_mname varchar(30), 
+    student_lname varchar(30) NOT NULL, 
+    student_email varchar(50) NOT NULL,
+    student_phone varchar(15) NOT NULL,
+    student_alternate_phone varchar(15),
+    enrollment_date timestamp NOT NULL,
+    years_of_exp int NOT NULL,
+    student_compnany varchar(30),
+    batch_date varchar(30) NOT NULL,
+    source_of_joining varchar(30) NOT NULL,
+    location varchar(50) NOT NULL,
+    PRIMARY KEY(student_id),
+    UNIQUE KEY(student_email)
+    );
+
+=================================
+BULK INSERT
+-------------
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rohit', 'Sharma', 'rohit@gmail.com', '8224512525', 6, 'walmart', '21-08-2022', 'linkedin', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Virat', 'Kohli', 'virat@gmail.com', '8212512525', 3, 'flipkart', '21-08-2022', 'linkedin', 'Hyderabad');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Shikhar', 'Dhawan', 'shikhar@gmail.com', '9114512525', 12, 'walmart', '28-08-2022', 'google', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rahul', 'Dravid', 'rahul@gmail.com', '9225512525', 8, 'walmart', '03-09-2022', 'linkedin', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values
+('Kapil', 'Dev', 'kapil@gmail.com', '7226512525', 15, 'walmart', '10-09-2022', 'friend', 'Pune'), 
+('Brian', 'Lara', 'brian@gmail.com', '9225123425', 20, 'wipro', '17-09-2022', 'youtube', 'Pune'),
+('Saurabh', 'Ganguly', 'saurabh@gmail.com', '9225512100', 14, 'wipro', '17-09-2022', 'google', 'Chennai');
+
+===============================
+SELECT
+------
+select student_id, enrollment_date, student_fname, student_email, 
+years_of_exp, student_compnany, batch_date, source_of_joining, location from students;
+
+-- Now lets create another table named as courses
+
+create table courses(
+    course_id int NOT NULL,
+    course_name varchar(30) NOT NULL,
+    course_duration_months int NOT NULL,
+    course_fee int NOT NULL,
+    PRIMARY KEY(course_id)
+    );
+
+--- Lets insert some seed data into the courses table
+
+INSERT INTO courses(course_id, course_name, course_duration_months, course_fee)
+values
+(1, 'big data', 6, 50000),
+(2, 'web development', 3, 20000),
+(3, 'data science', 6, 40000),
+(4, 'devops', 1, 10000);
+
+-- Now, students will enroll for any/all of the courses, so we have to restructure the students table
+
+-- Drop the table students
+drop table students;
+
+-- Again, create the students table with one more columns which is selected_course int NOT NULL
+CREATE TABLE students(
+    student_id int AUTO_INCREMENT, 
+    student_fname varchar(30) NOT NULL, 
+    student_mname varchar(30), 
+    student_lname varchar(30) NOT NULL, 
+    student_email varchar(50) NOT NULL,
+    student_phone varchar(15) NOT NULL,
+    student_alternate_phone varchar(15),
+    enrollment_date timestamp NOT NULL,
+    selected_course int NOT NULL DEFAULT 1,
+    years_of_exp int NOT NULL,
+    student_compnany varchar(30),
+    batch_date varchar(30) NOT NULL,
+    source_of_joining varchar(30) NOT NULL,
+    location varchar(50) NOT NULL,
+    PRIMARY KEY(student_id),
+    UNIQUE KEY(student_email)
+    );
+
+-- If a candidate hasn't selected any course then by default 'Big Data' course will get selected (Line no 103)
+
+--- Now again, we will do the BULK INSERT with value for new column (selected_course)
+
+=================================
+BULK INSERT
+-------------
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rohit', 'Sharma', 'rohit@gmail.com', '8224512525', 2, 6, 'walmart', '21-08-2022', 'linkedin', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Virat', 'Kohli', 'virat@gmail.com', '8212512525', 3, 3, 'flipkart', '21-08-2022', 'linkedin', 'Hyderabad');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Shikhar', 'Dhawan', 'shikhar@gmail.com', '9114512525', 3, 12, 'walmart', '28-08-2022', 'google', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rahul', 'Dravid', 'rahul@gmail.com', '9225512525', 4, 8, 'walmart', '03-09-2022', 'linkedin', 'bangalore');
+
+--- For the below inserts we aren't giving selected_course values hence it will take default value
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values
+('Kapil', 'Dev', 'kapil@gmail.com', '7226512525', 15, 'walmart', '10-09-2022', 'friend', 'Pune'), 
+('Brian', 'Lara', 'brian@gmail.com', '9225123425', 20, 'wipro', '17-09-2022', 'youtube', 'Pune'),
+('Saurabh', 'Ganguly', 'saurabh@gmail.com', '9225512100', 14, 'wipro', '17-09-2022', 'google', 'Chennai');
+
+===============================
+SELECT
+------
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, batch_date, source_of_joining, location from students;
+
+-- Now, what if we insert the record with selected_course as id = 5 which doesn't even exist ?
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Vikas', 'Dubey', 'vikas@gmail.com', '8525512525', 5, 8, 'walmart', '03-09-2022', 'linkedin', 'bangalore');
+
+-- It got inserted, but this is wrong (since the course doesn't even exists)
+
+===> Here comes the concept of FOREIGN KEY constraint which will prevent this kind of anomaly
+
+-- Drop the table students
+drop table students;
+
+-- Again, create the students table with FOREIGN KEY constraint --
+CREATE TABLE students(
+    student_id int AUTO_INCREMENT, 
+    student_fname varchar(30) NOT NULL, 
+    student_mname varchar(30), 
+    student_lname varchar(30) NOT NULL, 
+    student_email varchar(50) NOT NULL,
+    student_phone varchar(15) NOT NULL,
+    student_alternate_phone varchar(15),
+    enrollment_date timestamp NOT NULL,
+    selected_course int NOT NULL DEFAULT 1,
+    years_of_exp int NOT NULL,
+    student_compnany varchar(30),
+    batch_date varchar(30) NOT NULL,
+    source_of_joining varchar(30) NOT NULL,
+    location varchar(50) NOT NULL,
+    PRIMARY KEY(student_id),
+    UNIQUE KEY(student_email),
+    FOREIGN KEY(selected_course) REFERENCES courses(course_id)
+    );
+
+-- Here the PARENT TABLE is the courses because students table has dependency on courses table.
+-- CHILD TABLE is students.
+-- PARENT TABLE - courses
+-- CHILD TABLE - students
+
+=================================
+BULK INSERT
+-------------
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rohit', 'Sharma', 'rohit@gmail.com', '8224512525', 2, 6, 'walmart', '21-08-2022', 'linkedin', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Virat', 'Kohli', 'virat@gmail.com', '8212512525', 3, 3, 'flipkart', '21-08-2022', 'linkedin', 'Hyderabad');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Shikhar', 'Dhawan', 'shikhar@gmail.com', '9114512525', 3, 12, 'walmart', '28-08-2022', 'google', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('Rahul', 'Dravid', 'rahul@gmail.com', '9225512525', 4, 8, 'walmart', '03-09-2022', 'linkedin', 'bangalore');
+
+** All the above 4 queries will work fine, because selected_course exists in the courses table.
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, selected_course, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values('R', 'Ashwin', 'ashwin@gmail.com', '7775512525', 5, 10, 'walmart', '03-09-2022', 'linkedin', 'bangalore');
+
+INSERT INTO students (student_fname, student_lname, student_email, student_phone, years_of_exp, student_compnany, batch_date, source_of_joining, location)
+values
+('Kapil', 'Dev', 'kapil@gmail.com', '7226512525', 15, 'walmart', '10-09-2022', 'friend', 'Pune'), 
+('Brian', 'Lara', 'brian@gmail.com', '9225123425', 20, 'wipro', '17-09-2022', 'youtube', 'Pune'),
+('Saurabh', 'Ganguly', 'saurabh@gmail.com', '9225512100', 14, 'wipro', '17-09-2022', 'google', 'Chennai');
+
+* The above insert query will give error: Cannot add or update a child row: a foreign key constraint fails (`trendytech`.`students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`selected
+_course`) REFERENCES `courses` (`course_id`))
+
+--- SELECT -----
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students;
+
+--- Let say, if we want to delete course with id=3 from courses table, will it work ?
+delete from courses where course_id = 3;
+Error: Cannot delete or update a parent row: a foreign key constraint fails (`trendytech`.`students`, CONSTRAINT `students_ibfk_1` FOREIGN KEY (`sele
+cted_course`) REFERENCES `courses` (`course_id`))
+
+-- If we try to delete course which none of the student has taken yet, then it will delete successfully.
+delete from courses where course_id = <Course_id which none of the student has taken>
+
+----------------------
+FOREIGN KEY CONSTRAINT
+----------------------
+
+- The foreign key constraint is used to prevent actions that would destroy links between two tables.
+- A foreign key is a field in one table that refers to the primary key in another table.
+- selected_course is a foreign key in students table which refers to the course_id (primary key) in courses table.
+- The table with the foreign key is called the child table.
+- The table with primary key is called the parent or referenced table.
+
+----------
+CONSTRAINT
+----------
+
+- constraints are used to limit the type of data that can go into a table.
+- This ensures the accuracy and reliability of the data is maintained.
+- If there is any violation then the action is aborted.
+
+There are various constraints:
+1. NOT NULL
+2. UNIQUE KEY
+3. PRIMARY KEY
+4. FOREIGN KEY
+5. CHECK CONSTRAINT (not supported in mysql)

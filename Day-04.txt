@@ -1,0 +1,137 @@
+========= UPDATE, DELETE, ALTER, DDL vs DML, TRUNCATE vs DELETE =============
+
+-------------------------
+#### CRUD Operations ####
+-------------------------
+
+1. create - Insert
+2. read - select
+3. update - update
+4. delete - delete
+
+- DROP table employee;
+- CREATE TABLE employee(
+    id int PRIMARY KEY,
+    firstname varchar(20) NOT NULL,
+    middlename varchar(20),
+    lastname varchar(20) NOT NULL,
+    age int NOT NULL,
+    salary int NOT NULL,
+    location varchar(20) NOT NULL DEFAULT 'Bangalore'
+);
+
+INSERT INTO employee(id, firstname, lastname, age, salary) 
+values
+(1, 'Mridul', 'Yadav', 36, 10000);
+
+INSERT INTO employee(id, firstname, lastname, age, salary) 
+values
+(2, 'Vijay', 'Pokhriyal', 26, 10000);
+
+INSERT INTO employee(id, firstname, lastname, age, salary) 
+values
+(3, 'Akash', 'Kumar', 46, 10000);
+
+-----------------
+#### SELECT #####
+-----------------
+
+* selecting all columns - SELECT * FROM employee;
+
+* selecting specific columns;
+
+==> SELECT by applying WHERE clause
+
+# Find all the people whose age > 29
+
+select * from employee where age > 29;
+
+select * from employee where firstname = 'vijay';
+==> Above query will work fine.
+
+** By default, it is case insensitive;
+
+** So to query all the rows where firstname is Case-sensitive, we use BINARY keyword after WHERE
+select * from employee where binary firstname = 'vijay';
+
+- The above statement will match the exact case and is case sensitive.
+==> Above query will give error since firstname = 'vijay' is there but 'v' is not Capital letter
+
+---------------
+#### ALIAS ####
+---------------
+
+select firstname as name, lastname as surname from employee;
+
+---------------
+#### UPDATE ####
+---------------
+
+UPDATE employee SET lastname = 'Anand' where firstname = 'Vijay';
+
+UPDATE employee SET location = 'Hyderabad' where firstname = 'Akash';
+
+UPDATE employee SET salary = salary + 50000;
+
+UPDATE employee SET location = 'Pune' where firstname = 'Mridul' and lastname = 'Yadav';
+
+-----------------
+####  DELETE ####
+-----------------
+
+-- How to delete a record? 
+DELETE FROM employee where id = 3;
+
+-- To delete all the records
+DELETE FROM employee;
+
+---------------
+#### ALTER ####
+---------------
+
+-- To alter the structure of the table.
+
+DESC employee;
+
+-- UPDATE deals with data manipulation.
+-- ALTER deals with structure manipulation.
+
+## ADD ##
+ALTER table employee ADD COLUMN jobtitle varchar(50);
+
+## DROP ##
+ALTER table employee DROP COLUMN jobtitle;
+
+## MODIFY ##
+ALTER table employee MODIFY firstname varchar(30);
+
+## To drop the Primary Key ##
+ALTER table employee DROP primary key;
+
+## To add the primary key ##
+ALTER table employee ADD primary key(id);
+
+--------------------
+#### DDL vs DML ####
+--------------------
+
+-- DDL - Data Definition Language
+==> deals with table structure
+==> CREATE, ALTER, DROP - DDL commands
+
+-- DML - Data Manipulation Language
+==> deals with data directly
+==> INSERT, UPDATE, DELETE - DML commands
+
+--------------------
+#### TRUNCATE ####
+--------------------
+
+DELETE from employee; -- DML commands
+TRUNCATE TABLE employee; -- DDL commands
+
+-- What is the difference b/w DELETE & TRUNCATE ?
+==> DELETE records the data one by one.
+==> TRUNCATE internally drops the table and re-create it.
+
+** TRUNCATE is more efficient than DELETE as it DROPs the table and re-create it while DELETE deletes the records one by one.

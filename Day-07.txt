@@ -1,0 +1,77 @@
+------------------
+ORDER OF EXECUTION
+------------------
+
+-- In the previous session, the below query has given an error
+Error: Expression #1 of ORDER BY clause is not in SELECT list, references column 'trendytech.students.enrollment_date' which
+is not in SELECT list; this is incompatible with DISTINCT
+
+SELECT DISTINCT source_of_joining from students ORDER BY enrollment_date DESC;
+
+-- Why the above query has given error ?
+* We are doing DISTINCT & ORDER BY together here
+
+ORDER OF EXECUTION
+-------------------
+SELECT source_of_joining FROM students;
+
+FROM (Loading the Table)
+
+SELECT (Projecting source_of_joining)
+--------
+SELECT source_of_joining, enrollment_date FROM students;
+
+FROM (Loading the Table)
+
+SELECT (Projecting source_of_joining, enrollment_date)
+---------
+SELECT source_of_joining, enrollment_date FROM students ORDER BY enrollment_date;
+
+---
+OOE
+---
+FROM (Loading the Table)
+--> SELECT * from students;
+
+SELECT (Projecting source_of_joining, enrollment_date)
+--> SELECT source_of_joining, enrollment_date FROM students;
+
+ORDER BY (based on enrollment_date it will order by)
+--> SELECT source_of_joining, enrollment_date FROM students ORDER BY enrollment_date;
+
+---------------------
+SELECT source_of_joining FROM students ORDER BY enrollment_date;
+
+---
+OOE
+---
+FROM (Loading the Table)
+--> SELECT * from students;
+
+SELECT (Projecting source_of_joining, enrollment_date) -- The system is intelligent enough because later we are doing ORDER BY on 
+-- enrollment_date, so it will project to enrollment_date also
+--> SELECT source_of_joining FROM students;
+
+ORDER BY (based on enrollment_date it will order by)
+--> SELECT source_of_joining FROM students ORDER BY enrollment_date;
+-----------------------
+SELECT DISTINCT source_of_joining FROM students ORDER BY enrollment_date;
+
+---
+OOE
+---
+FROM (Loading the Table)
+--> SELECT * from students;
+
+SELECT (Projecting source_of_joining, enrollment_date) -- The system is intelligent enough because later we are doing ORDER BY on 
+-- enrollment_date, so it will project to enrollment_date also
+--> SELECT source_of_joining FROM students;
+
+DISTINCT
+-- SELECT DISTINCT source_of_joining FROM students;
+-- SELECT DISTINCT source_of_joining, enrollment_date FROM students; -- Logically it will do the DISTINCT on 2 columns which is wrong
+
+ORDER BY (based on enrollment_date it will order by)
+--> SELECT DISTINCT source_of_joining FROM students ORDER BY enrollment_date;
+
+==> That's why SQL has given error because Logically things are going wrong

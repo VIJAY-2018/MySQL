@@ -1,0 +1,115 @@
+-------------------------------
+DISTINCT, ORDER BY, LIMIT, LIKE
+-------------------------------
+
+---------
+DISTINCT 
+---------
+
+==> DISTINCT fetches the distinct records.
+
+select location from students; -- It will also contain duplicate data
+
+select DISTINCT location from students;
+
+-- Which all company do the students work ?
+select DISTINCT student_compnany from students;
+
+-- From which all sources people are knowing about Trendytech ?
+select DISTINCT source_of_joining from students;
+
+---------
+ORDER BY
+---------
+
+==> ORDER BY sorts the data.
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students ORDER BY years_of_exp;
+
+select student_fname from students ORDER BY student_fname;
+
+select student_fname from students ORDER BY years_of_exp;
+
+-- Student with highest years of experience on top
+
+select student_fname from students ORDER BY years_of_exp DESC;
+
+select student_fname, years_of_exp from students ORDER BY years_of_exp, student_fname;
+
+-- The above query will order by years_of_exp and then it will order by student_fname
+
+-----
+LIMIT
+-----
+
+-- Fetch the first 3 records
+select * from students LIMIT 3;
+
+** LIMIT has to be used along with ORDER BY in order to get the meaningful results.
+
+-- Fetch the details of 3 candidates who have the least experience
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students ORDER BY years_of_exp LIMIT 3;
+
+-- Fetch the details of 3 candidates who have the highest experience
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students ORDER BY years_of_exp DESC LIMIT 3;
+
+-- Fetch the details of source of joining of last 5 candidates who have joined trendytech
+
+select source_of_joining from students ORDER BY enrollment_date DESC LIMIT 5;
+
+-- Fetch the distinct details of source of joining of last 5 candidates who have joined trendytech
+
+-- The below query won't work [Will discuss in next session]
+select DISTINCT source_of_joining from students ORDER BY enrollment_date DESC LIMIT 5;
+
+Error: Expression #1 of ORDER BY clause is not in SELECT list, references column 'trendytech.students.enrollment_date' which is not in SELECT list; this is incompatible
+ with DISTINCT
+
+-- Fetch the details of the last candidate who has enrolled for trendytech
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students ORDER BY enrollment_date DESC LIMIT 1;
+
+-- The below query will give the first 3 records, same as LIMIT 3
+select * from students ORDER BY enrollment_date LIMIT 0,3;
+
+-- The below query will give the 4th and 5th records, 0-->1-->2-->3(4th record)-->4(5th record)
+select * from students ORDER BY enrollment_date LIMIT 3,2;
+
+-----
+LIKE
+-----
+
+-- Fetch the details of all the students whose name contains 'ra'
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students WHERE student_fname LIKE '%ra%';
+
+** % (0 or more character) is a wildcard character
+** _ (exactly one character) is a wildcard character
+
+-- Fetch the details of all the students whose name starts with 'ra'
+
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students WHERE student_fname LIKE 'ra%';
+
+-- Fetch the details of all the students whose name ends with 'at'
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students WHERE student_fname LIKE '%at';
+
+-- Fetch the details of all the students whose student_fname has only 5 characters
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students WHERE student_fname LIKE '_____';
+
+* 5 underscors will come in above query
+
+-- Fetch the details of all the students whose name ends with '%at'
+select student_id, enrollment_date, selected_course, student_fname, years_of_exp, student_compnany, 
+batch_date, source_of_joining, location from students WHERE student_fname LIKE '%\%at';
+
+* We use \ (backslash character) if any special character is there in data

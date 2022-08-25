@@ -1,0 +1,67 @@
+-------------------
+AGGREGATE FUNCTIONS
+-------------------
+
+-----
+COUNT
+-----
+-- To count the number of rows in the table
+SELECT COUNT(*) FROM students;
+
+-- To count the companies from where students are enrolling for a course
+SELECT COUNT(student_compnany) from students;
+
+-- To count the unique companies from where students are enrolling for a course
+SELECT COUNT(DISTINCT student_compnany) AS companies from students;
+
+-- To check from which all locations people are joining the course
+SELECT COUNT(DISTINCT location) from students;
+
+-- To check from which all different sources people are joining the course
+SELECT COUNT(DISTINCT source_of_joining) from students;
+
+-- Find the number of students who have enrolled for August batch
+SELECT COUNT(*) from students where batch_date LIKE '%-08-%';
+
+-- Find the number of students whose batch starting from 17
+SELECT COUNT(*) from students where batch_date LIKE '17-%-%';
+
+-------------------
+
+---------
+GROUP BY
+--------
+
+-- Group the data based on some Logically
+-- All the people who works in Walmart can be grouped together.
+-- All the people who works in Microsoft can be grouped together.
+
+Eg:
+-- How many people have joined the course got to know about Trendytech through
+
+linkedin - 5
+google - 2
+quora - 1
+
+-- We have to do the GROUP BY on source_of_joining column
+
+SELECT source_of_joining, count(*) from students GROUP BY source_of_joining;
+
+** If we are grouping something then that column must always be there in SELECT query otherwise we will get an error
+
+SELECT location, count(*) from students GROUP BY source_of_joining; -- Incorrect query
+
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'trendytech.students.location
+' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+
+-- Find the number of students who have joined the course through different locations
+
+SELECT location, count(*) from students GROUP BY location;
+
+-- From Banglore location and source_of_joining is linkedin how many students have enrolled ?
+
+-- GROUP BY on two columns
+SELECT location, source_of_joining, count(*) from students group by location, source_of_joining;
+
+-- For each course how many people are enrolled
+SELECT course_name, COUNT(*) from students GROUP BY course_name;

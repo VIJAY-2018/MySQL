@@ -1,0 +1,117 @@
+--------------------
+A few more datatypes
+--------------------
+- Currently, in the courses table, we have course_duration_months is in integer
+- We want it in decimal (For eg: 3.5)
+- if we try to insert decimal value it will get rounded off to nearest integer
+
+INSERT INTO courses values(5, 'Blockchain', 3.5, 40000);
+-- 3.5 will be rounded off to 4
+
+-------
+DECIMAL
+-------
+decimal(3,2) --> total 3 digits and 2 digits after decimal
+
+create table courses_new(
+    course_id int NOT NULL,
+    course_name varchar(30) NOT NULL,
+    course_duration_months decimal(3,1) NOT NULL,
+    course_fee int NOT NULL,
+    PRIMARY KEY(course_id)
+    );
+
+--- Lets insert some seed data into the courses table
+
+INSERT INTO courses_new(course_id, course_name, course_duration_months, course_fee)
+values
+(1, 'big data', 6.5, 50000),
+(2, 'web development', 3.4, 20000),
+(3, 'data science', 6, 40000);
+
+-- If course_duration_months is an integer, it will become X.0 where X is any integer
+
+-- Let say, we want to update the course_fee
+
+UPDATE courses_new SET course_fee = 40000 WHERE course_id = 2;
+
+--- Let say, we want to keep track of the changes we made in the table (AUDIT_HISTORY)
+
+* To keep track of the changes we make in the table, we need TIMESTAMP datatype
+
+-- Drop the table
+DROP TABLE courses_new;
+
+-- Create the table
+create table courses_new(
+course_id int NOT NULL,
+course_name varchar(30) NOT NULL,
+course_duration_months decimal(3,1) NOT NULL,
+course_fee int NOT NULL,
+changed_at TIMESTAMP DEFAULT NOW(),
+PRIMARY KEY(course_id)
+);
+
+-- Insert the records
+INSERT INTO courses_new(course_id, course_name, course_duration_months, course_fee)
+values
+(1, 'big data', 6.5, 50000),
+(2, 'web development', 3.4, 20000),
+(3, 'data science', 6, 40000);
+
+-- The TIMESTAMP will be the UTC time
+
+INSERT INTO courses_new(course_id, course_name, course_duration_months, course_fee)
+values
+(4, 'Devops', 7.5, 70000);
+
+-- Lets update course_fee for web development course;
+UPDATE courses_new SET course_fee = 30000 where course_id = 2;
+
+-- The TIMESTAMP is not getting updated even after executing UPDATE query
+
+-- We have to restructure the table definition
+
+-- Drop the table
+DROP TABLE courses_new;
+
+-- Create the table
+create table courses_new(
+course_id int NOT NULL,
+course_name varchar(30) NOT NULL,
+course_duration_months decimal(3,1) NOT NULL,
+course_fee int NOT NULL,
+changed_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
+PRIMARY KEY(course_id)
+);
+
+OR
+
+create table courses_new(
+course_id int NOT NULL,
+course_name varchar(30) NOT NULL,
+course_duration_months decimal(3,1) NOT NULL,
+course_fee int NOT NULL,
+changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+PRIMARY KEY(course_id)
+);
+
+** NOW() == CURRENT_TIMESTAMP()
+
+-- Insert the records
+INSERT INTO courses_new(course_id, course_name, course_duration_months, course_fee)
+values
+(1, 'big data', 6.5, 50000),
+(2, 'web development', 3.4, 20000),
+(3, 'data science', 6, 40000);
+
+-- The TIMESTAMP will be the UTC time
+
+INSERT INTO courses_new(course_id, course_name, course_duration_months, course_fee)
+values
+(4, 'Devops', 7.5, 70000);
+
+-- Lets update course_fee for web development course;
+UPDATE courses_new SET course_fee = 30000 where course_id = 2;
+
+-- Now the timestamp is getting changed on UPDATE
