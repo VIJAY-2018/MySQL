@@ -1,0 +1,52 @@
+-----------------
+LOGICAL OPERATORS
+-----------------
+
+-- Find the students based out of Banglore
+SELECT * FROM students WHERE location = 'Bangalore';
+
+-- Find the students who are not from Banglore
+SELECT * FROM students WHERE location != 'Bangalore';
+
+-- Find the courses which contain "Data" as the keyword
+SELECT * FROM courses WHERE course_name LIKE '%data%';
+
+-- Find the courses which do not contain "Data" as the keyword
+SELECT * FROM courses WHERE course_name NOT LIKE '%data%';
+
+-- Find all the students from Bangalore who joined through linkedin and have less than 8 years_of_exp
+SELECT * FROM students WHERE location = 'Bangalore' AND source_of_joining = 'linkedin' AND years_of_exp < 8;
+
+-- Find all the students who do no fall between 8 to 12 years_of_exp
+SELECT * FROM students WHERE years_of_exp < 8 OR years_of_exp > 12;
+SELECT * FROM students WHERE years_of_exp NOT BETWEEN 8 AND 12;
+
+-- Find all the students who are working either for Flipkart or Walmart or Microsoft
+SELECT * FROM students WHERE student_compnany = 'flipkart' OR student_compnany = 'Walmart' OR student_compnany = 'Microsoft';
+SELECT * FROM students WHERE student_compnany IN ('flipkart', 'Walmart', 'Microsoft');
+
+-- Find all the students who are not working in either Flipkart or Walmart or Microsoft
+SELECT * FROM students WHERE student_compnany NOT IN ('flipkart', 'Walmart', 'Microsoft');
+
+--------------
+CASE STATEMENT
+--------------
+
+-- If a course is more than 4 months we categorize it as Master's Program else it is a Diploma
+
+SELECT course_id, course_name, course_fee,
+    CASE
+        WHEN course_duration_months > 4 THEN 'Masters'
+        ELSE 'Diploma'
+    END AS course_type
+FROM courses;
+
+-- If students are working in 'Flipkart', 'Walmart' or 'Microsoft' then it is a Product Based else Service Based
+
+SELECT student_id, student_fname, student_lname, student_compnany,
+    CASE
+        WHEN student_compnany IN ('flipkart', 'Walmart', 'Microsoft') THEN 'Product Based'
+        WHEN student_compnany is NULL THEN 'Invalid company'
+        ELSE 'Service Based'
+    END AS company_type
+FROM students;
